@@ -20,6 +20,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
@@ -33,6 +34,7 @@ type (
 	Config struct {
 		GRPC     GRPCConfig     `mapstructure:"grpc"`
 		Database DatabaseConfig `mapstructure:"database"`
+		Code     CodeConfig     `mapstructure:"code"`
 		Service  ServiceConfig  `mapstructure:"service"`
 	}
 
@@ -56,6 +58,13 @@ type (
 
 	// Redis config variables.
 	RedisConfig struct{ URL string }
+
+	// Code config variables.
+	CodeConfig struct {
+		TTL       time.Duration `mapstructure:"ttl"`
+		MaxLength int64         `mapstructure:"max-length"`
+		MinLength int64         `mapstructure:"min-length"`
+	}
 
 	// Service base config.
 	Service struct {

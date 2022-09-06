@@ -15,18 +15,29 @@
  * along with Durudex. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package service
+package code
 
 import (
-	"github.com/durudex/durudex-code-service/internal/client"
-	"github.com/durudex/durudex-code-service/internal/config"
-	"github.com/durudex/durudex-code-service/internal/repository"
+	"crypto/rand"
+	"math/big"
 )
 
-// Service structure.
-type Service struct{ User }
+// Code manager interface.
+type Code interface {
+	// Generating a random uint64 code.
+	Generate() (uint64, error)
+}
 
-// Creating a new service.
-func NewService(repos *repository.Repository, client *client.Client, cfg *config.Config) *Service {
-	return &Service{User: NewUserService(repos.Redis.User, client.Email.User, cfg.Code)}
+// Generating a random uint64 code.
+func Generate(maxLength, minLength int64) (uint64, error) {
+	// Creating big int.
+	bg := big.NewInt(maxLength - minLength)
+
+	// Generating random code.
+	code, err := rand.Int(rand.Reader, bg)
+	if err != nil {
+		return 0, err
+	}
+
+	return code.Uint64() + uint64(minLength), nil
 }

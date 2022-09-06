@@ -21,6 +21,7 @@ import (
 	"os"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/durudex/durudex-code-service/internal/config"
 )
@@ -65,6 +66,11 @@ func TestConfig_NewConfig(t *testing.T) {
 				},
 				Database: config.DatabaseConfig{
 					Redis: config.RedisConfig{URL: "redis://code.redis.durudex.local:6379"},
+				},
+				Code: config.CodeConfig{
+					TTL:       time.Minute * 15,
+					MaxLength: 999999,
+					MinLength: 100000,
 				},
 				Service: config.ServiceConfig{
 					Email: config.Service{

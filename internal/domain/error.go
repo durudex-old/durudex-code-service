@@ -15,18 +15,28 @@
  * along with Durudex. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package service
+package domain
 
-import (
-	"github.com/durudex/durudex-code-service/internal/client"
-	"github.com/durudex/durudex-code-service/internal/config"
-	"github.com/durudex/durudex-code-service/internal/repository"
+import "fmt"
+
+// Error status code key.
+type Code int
+
+// Error status codes.
+const (
+	CodeInternal Code = iota
+	CodeNotFound
+	CodeAlreadyExists
+	CodeInvalidArgument
 )
 
-// Service structure.
-type Service struct{ User }
+// Error structure.
+type Error struct {
+	Code    Code
+	Message string
+}
 
-// Creating a new service.
-func NewService(repos *repository.Repository, client *client.Client, cfg *config.Config) *Service {
-	return &Service{User: NewUserService(repos.Redis.User, client.Email.User, cfg.Code)}
+// Getting error message.
+func (e *Error) Error() string {
+	return fmt.Sprintf("%d: %s", e.Code, e.Message)
 }

@@ -22,6 +22,11 @@ server:
     cert: "./certs/code.service.durudex.local-cert.pem"
     key: "./certs/code.service.durudex.local-key.pem"
 
+code:
+  ttl: "15m"
+  max-length: 999999
+  min-length: 100000
+
 service:
   email:
     addr: "email.service.durudex.local:8002"
