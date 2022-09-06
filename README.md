@@ -31,6 +31,9 @@ DEBUG=false
 
 # Config variables:
 CONFIG_PATH=configs/main
+
+# Redis database variables:
+REDIS_URL=redis://code.redis.durudex.local:6379
 ```
 2) Generate certificates, information can be found at [certs/README.md](certs/README.md).
 

@@ -51,7 +51,10 @@ type (
 	}
 
 	// Database config variables.
-	DatabaseConfig struct{}
+	DatabaseConfig struct{ Redis RedisConfig }
+
+	// Redis config variables.
+	RedisConfig struct{ URL string }
 )
 
 // Creating a new config.
@@ -69,6 +72,9 @@ func NewConfig() (*Config, error) {
 	if err := viper.Unmarshal(&cfg); err != nil {
 		return nil, err
 	}
+
+	// Set configurations from environment.
+	setFromEnv(&cfg)
 
 	return &cfg, nil
 }
@@ -93,4 +99,12 @@ func parseConfigFile() error {
 
 	// Read config file.
 	return viper.ReadInConfig()
+}
+
+// Set configurations from environment.
+func setFromEnv(cfg *Config) {
+	log.Debug().Msg("Set configurations from environment...")
+
+	// Redis database configurations.
+	cfg.Database.Redis.URL = os.Getenv("REDIS_URL")
 }

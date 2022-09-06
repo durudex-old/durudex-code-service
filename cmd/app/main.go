@@ -67,6 +67,9 @@ func main() {
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
+	// Closing Redis client connection.
+	repos.Redis.Close()
+
 	// Stopping server.
 	srv.Stop()
 

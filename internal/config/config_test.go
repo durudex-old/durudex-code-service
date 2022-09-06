@@ -28,7 +28,7 @@ import (
 // Testing creating a new config.
 func TestConfig_NewConfig(t *testing.T) {
 	// Environment configurations.
-	type env struct{ configPath string }
+	type env struct{ configPath, redisURL string }
 
 	// Testing args.
 	type args struct{ env env }
@@ -36,6 +36,7 @@ func TestConfig_NewConfig(t *testing.T) {
 	// Set environments configurations.
 	setEnv := func(env env) {
 		os.Setenv("CONFIG_PATH", env.configPath)
+		os.Setenv("REDIS_URL", env.redisURL)
 	}
 
 	// Tests structures.
@@ -49,6 +50,7 @@ func TestConfig_NewConfig(t *testing.T) {
 			name: "OK",
 			args: args{env: env{
 				configPath: "fixtures/main",
+				redisURL:   "redis://code.redis.durudex.local:6379",
 			}},
 			want: &config.Config{
 				GRPC: config.GRPCConfig{
@@ -61,7 +63,9 @@ func TestConfig_NewConfig(t *testing.T) {
 						Key:    "./certs/code.service.durudex.local-key.pem",
 					},
 				},
-				Database: config.DatabaseConfig{}},
+				Database: config.DatabaseConfig{
+					Redis: config.RedisConfig{URL: "redis://code.redis.durudex.local:6379"},
+				}},
 		},
 	}
 

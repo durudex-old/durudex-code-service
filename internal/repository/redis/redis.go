@@ -15,17 +15,35 @@
  * along with Durudex. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package repository
+package redis
 
 import (
 	"github.com/durudex/durudex-code-service/internal/config"
-	"github.com/durudex/durudex-code-service/internal/repository/redis"
+	"github.com/durudex/durudex-code-service/pkg/database/redis"
+
+	"github.com/rs/zerolog/log"
 )
 
-// Repository structure.
-type Repository struct{ Redis *redis.RedisRepository }
+// Redis repository structure.
+type RedisRepository struct {
+	User   User
+	client *redis.Client
+}
 
-// Creating a new repository.
-func NewRepository(config config.DatabaseConfig) *Repository {
-	return &Repository{Redis: redis.NewRedisRepository(config.Redis)}
+// Creating a new redis repository.
+func NewRedisRepository(cfg config.RedisConfig) *RedisRepository {
+	log.Debug().Msg("Creating a new redis repository")
+
+	// Creating a new redis client.
+	client, err := redis.NewClient(cfg.URL)
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to create redis client")
+	}
+
+	return &RedisRepository{User: NewUserRepository(client)}
+}
+
+// Closing Redis client connection.
+func (r *RedisRepository) Close() {
+	r.client.Close()
 }

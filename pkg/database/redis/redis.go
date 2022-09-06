@@ -15,17 +15,35 @@
  * along with Durudex. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package repository
+package redis
 
 import (
-	"github.com/durudex/durudex-code-service/internal/config"
-	"github.com/durudex/durudex-code-service/internal/repository/redis"
+	"context"
+
+	"github.com/go-redis/redis/v8"
 )
 
-// Repository structure.
-type Repository struct{ Redis *redis.RedisRepository }
+// Redis driver interface.
+type Redis redis.Cmdable
 
-// Creating a new repository.
-func NewRepository(config config.DatabaseConfig) *Repository {
-	return &Repository{Redis: redis.NewRedisRepository(config.Redis)}
+// Redis client structure.
+type Client struct{ *redis.Client }
+
+// Creating a new redis client.
+func NewClient(url string) (*Client, error) {
+	// Parsing redis url.
+	opt, err := redis.ParseURL(url)
+	if err != nil {
+		return nil, err
+	}
+
+	// Creating a new redis client.
+	client := redis.NewClient(opt)
+
+	// Check for connections operation.
+	if err := client.Ping(context.Background()).Err(); err != nil {
+		return nil, err
+	}
+
+	return &Client{client}, nil
 }
