@@ -17,12 +17,15 @@
 
 package service
 
-import "github.com/durudex/durudex-code-service/internal/repository"
+import (
+	"github.com/durudex/durudex-code-service/internal/client"
+	"github.com/durudex/durudex-code-service/internal/repository"
+)
 
 // Service structure.
 type Service struct{ User }
 
 // Creating a new service.
-func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+func NewService(repos *repository.Repository, client *client.Client) *Service {
+	return &Service{User: NewUserService(repos.Redis.User, client.Email.User)}
 }

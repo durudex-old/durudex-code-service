@@ -33,6 +33,7 @@ type (
 	Config struct {
 		GRPC     GRPCConfig     `mapstructure:"grpc"`
 		Database DatabaseConfig `mapstructure:"database"`
+		Service  ServiceConfig  `mapstructure:"service"`
 	}
 
 	// gRPC server config variables.
@@ -55,6 +56,17 @@ type (
 
 	// Redis config variables.
 	RedisConfig struct{ URL string }
+
+	// Service base config.
+	Service struct {
+		Addr string    `mapstructure:"addr"`
+		TLS  TLSConfig `mapstructure:"tls"`
+	}
+
+	// Services config variables.
+	ServiceConfig struct {
+		Email Service `mapstructure:"email"`
+	}
 )
 
 // Creating a new config.

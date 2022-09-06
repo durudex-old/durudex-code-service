@@ -22,6 +22,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/durudex/durudex-code-service/internal/client"
 	"github.com/durudex/durudex-code-service/internal/config"
 	"github.com/durudex/durudex-code-service/internal/repository"
 	"github.com/durudex/durudex-code-service/internal/service"
@@ -51,8 +52,10 @@ func main() {
 
 	// Creating a new repository.
 	repos := repository.NewRepository(cfg.Database)
+	// Creating a new client.
+	client := client.NewClient(cfg.Service)
 	// Creating a new service.
-	service := service.NewService(repos)
+	service := service.NewService(repos, client)
 	// Creating a new gRPC handler.
 	handler := grpc.NewHandler(service)
 
@@ -69,6 +72,9 @@ func main() {
 
 	// Closing Redis client connection.
 	repos.Redis.Close()
+
+	// Closing a client connections.
+	client.Close()
 
 	// Stopping server.
 	srv.Stop()

@@ -17,7 +17,12 @@
 
 package service
 
-import "context"
+import (
+	"context"
+
+	"github.com/durudex/durudex-code-service/internal/repository/redis"
+	v1 "github.com/durudex/durudex-code-service/pkg/pb/durudex/v1"
+)
 
 // User code service interface.
 type User interface {
@@ -25,4 +30,25 @@ type User interface {
 	CreateVerifyEmailCode(ctx context.Context, email string) error
 	// Verify user email code.
 	VerifyEmailCode(ctx context.Context, email string, code uint64) (bool, error)
+}
+
+// User code service structure.
+type UserService struct {
+	repos redis.User
+	email v1.EmailUserServiceClient
+}
+
+// Creating a new user code service.
+func NewUserService(repos redis.User, email v1.EmailUserServiceClient) *UserService {
+	return &UserService{repos: repos, email: email}
+}
+
+// Create verify user email code.
+func (s *UserService) CreateVerifyEmailCode(ctx context.Context, email string) error {
+	return nil
+}
+
+// Verify user email code.
+func (s *UserService) VerifyEmailCode(ctx context.Context, email string, code uint64) (bool, error) {
+	return false, nil
 }

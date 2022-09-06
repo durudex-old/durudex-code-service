@@ -21,3 +21,12 @@ server:
     ca-cert: "./certs/rootCA.pem"
     cert: "./certs/code.service.durudex.local-cert.pem"
     key: "./certs/code.service.durudex.local-key.pem"
+
+service:
+  email:
+    addr: "email.service.durudex.local:8002"
+    tls:
+      enable: true
+      ca-cert: "./certs/rootCA.pem"
+      cert: "./certs/client-cert.pem"
+      key: "./certs/client-key.pem"

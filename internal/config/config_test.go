@@ -65,7 +65,19 @@ func TestConfig_NewConfig(t *testing.T) {
 				},
 				Database: config.DatabaseConfig{
 					Redis: config.RedisConfig{URL: "redis://code.redis.durudex.local:6379"},
-				}},
+				},
+				Service: config.ServiceConfig{
+					Email: config.Service{
+						Addr: "email.service.durudex.local:8002",
+						TLS: config.TLSConfig{
+							Enable: true,
+							CACert: "./certs/rootCA.pem",
+							Cert:   "./certs/client-cert.pem",
+							Key:    "./certs/client-key.pem",
+						},
+					},
+				},
+			},
 		},
 	}
 
