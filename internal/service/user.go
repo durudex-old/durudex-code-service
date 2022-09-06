@@ -17,12 +17,12 @@
 
 package service
 
-import "github.com/durudex/durudex-code-service/internal/repository"
+import "context"
 
-// Service structure.
-type Service struct{ User }
-
-// Creating a new service.
-func NewService(repos *repository.Repository) *Service {
-	return &Service{}
+// User code service interface.
+type User interface {
+	// Create verify user email code.
+	CreateVerifyEmailCode(ctx context.Context, email string) error
+	// Verify user email code.
+	VerifyEmailCode(ctx context.Context, email string, code uint64) (bool, error)
 }
