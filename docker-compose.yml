@@ -24,7 +24,9 @@ services:
       dockerfile: Dockerfile
     hostname: code.service.durudex.local
     ports:
-      - 8000:8000
+      - 8003:8003
+    depends_on:
+      - redis
     volumes:
       - ./.bin/:/root/
       - ./certs/:/root/certs/
@@ -35,9 +37,26 @@ services:
       - durudex-backend
       - durudex-database
 
+  redis:
+    image: redis:alpine
+    container_name: auth-redis
+    command: redis-server
+    hostname: auth.redis.durudex.local
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - durudex-auth:/data
+    networks:
+      - durudex-database
+
 volumes:
-  durudex:
-    name: durudex
+  durudex-auth:
+    name: durudex-auth
 
 networks:
   durudex-backend:
